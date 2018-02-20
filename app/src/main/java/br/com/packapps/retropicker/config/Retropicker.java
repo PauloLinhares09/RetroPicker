@@ -1,10 +1,7 @@
 package br.com.packapps.retropicker.config;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.fragments.RetroPickerFragment;
@@ -13,7 +10,7 @@ import br.com.packapps.retropicker.fragments.RetroPickerFragment;
  * Created by paulo.linhares on 08/02/18.
  */
 
-public class Retropicker implements RetroPickerFragment.OnFragmentInteractionListener {
+public class Retropicker {
 
     private String packageApp;
     private int actionType;
@@ -37,8 +34,7 @@ public class Retropicker implements RetroPickerFragment.OnFragmentInteractionLis
 
         if (throwable == null){
             retroPickerFragment = RetroPickerFragment.newInstance(actionType, null);
-            retroPickerFragment = RetroPickerFragment.newInstance(actionType, null);
-            FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+            FragmentTransaction ft = context.getFragmentManager().beginTransaction();
             ft.add(retroPickerFragment, "RETROPICKER_FRAGMENT");
             ft.commit();
         }
@@ -53,20 +49,20 @@ public class Retropicker implements RetroPickerFragment.OnFragmentInteractionLis
             callbackPicker.onFailure(throwable);
         }else{
             //call
-            switch (actionType){
-                case CAMERA_PICKER:
-                    this.callbackPicker = callbackPicker;
-                    try{
-                        retroPickerFragment.callCameraIntent();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    break;
-            }
+            retroPickerFragment.setCallBack(callbackPicker);
+            retroPickerFragment.setContext(context);
+
+//            switch (actionType){
+//                case CAMERA_PICKER:
+//                    this.callbackPicker = callbackPicker;
+//                    try{
+//                        retroPickerFragment.callCameraIntent();
+//                    }catch (Exception e){
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//            }
         }
-
-
-
 
     }
 
@@ -80,14 +76,5 @@ public class Retropicker implements RetroPickerFragment.OnFragmentInteractionLis
     }
 
 
-    @Override
-    public void onSuccessFragment(Bitmap bitmap, String imagePath) {
-        callbackPicker.onSuccess(bitmap, imagePath);
-    }
 
-    @Override
-    public void onFailureFragment(Throwable e) {
-        callbackPicker.onFailure(e);
-
-    }
 }
