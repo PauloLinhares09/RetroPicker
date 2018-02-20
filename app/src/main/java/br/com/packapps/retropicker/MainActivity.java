@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import br.com.packapps.retropicker.action.PhotoPicker;
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.config.Retropicker;
 
@@ -20,11 +19,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btActionImage(View view) {
-        PhotoPicker photoPicker = Retropicker.createAction(getPackageName(), Retropicker.PHOTO_PICKER, "first_image.jpg");
-        photoPicker.enquee(new CallbackPicker() {
+
+        Retropicker retropicker = Retropicker.createAction(this, getPackageName(), Retropicker.CAMERA_PICKER, "first_image.jpg");
+
+        retropicker.enquee(new CallbackPicker() {
             @Override
-            public void onSuccess(Bitmap bitmap, Intent data) {
+            public void onSuccess(Bitmap bitmap, String imagePath) {
                 Toast.makeText(MainActivity.this, "bitmap: " + bitmap, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "imagePath: " + imagePath, Toast.LENGTH_SHORT).show();
             }
 
             @Override

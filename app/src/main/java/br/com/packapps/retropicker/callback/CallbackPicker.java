@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 
 public interface CallbackPicker {
 
-    void onSuccess(Bitmap bitmap, Intent data);
+    void onSuccess(Bitmap bitmap, String ImagePath);
 
     void onFailure(Throwable error);
 }
