@@ -6,7 +6,6 @@ package br.com.packapps.retropicker.Util;
 
 public class Const {
 
-
     public class Params{
         public static final String TYPE_ACTION = "type_action";
 

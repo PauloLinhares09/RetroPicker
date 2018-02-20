@@ -12,10 +12,6 @@ import android.provider.MediaStore;
 import android.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -23,9 +19,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.packapps.retropicker.R;
 import br.com.packapps.retropicker.Util.Const;
 import br.com.packapps.retropicker.callback.CallbackPicker;
+import br.com.packapps.retropicker.config.Retropicker;
 
 /**
  * @Author Paulo linhares 20/02/2018
@@ -37,8 +33,7 @@ public class RetroPickerFragment extends Fragment {
 
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private int type_action;
+    private int actionType;
     private String mParam2;
 
     private String mCurrentPhotoPath;
@@ -63,7 +58,7 @@ public class RetroPickerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            type_action = getArguments().getInt(Const.Params.TYPE_ACTION);
+            actionType = getArguments().getInt(Const.Params.TYPE_ACTION);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -73,7 +68,14 @@ public class RetroPickerFragment extends Fragment {
         super.onAttach(context);
         Log.d("TAG", "onAttach");
         this.activity = (Activity) context;
-        callCameraIntent();
+
+        switch (actionType){
+            case Retropicker.CAMERA_PICKER:
+                callCameraIntent();
+                break;
+                //TODO gallery
+        }
+
 
     }
 
