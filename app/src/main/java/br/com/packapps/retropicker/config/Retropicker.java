@@ -50,18 +50,6 @@ public class Retropicker {
         }else{
             //call
             retroPickerFragment.setCallBack(callbackPicker);
-            retroPickerFragment.setContext(context);
-
-//            switch (actionType){
-//                case CAMERA_PICKER:
-//                    this.callbackPicker = callbackPicker;
-//                    try{
-//                        retroPickerFragment.callCameraIntent();
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                    break;
-//            }
         }
 
     }

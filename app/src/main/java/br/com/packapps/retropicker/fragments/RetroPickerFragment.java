@@ -72,6 +72,7 @@ public class RetroPickerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d("TAG", "onAttach");
+        this.activity = (Activity) context;
         callCameraIntent();
 
     }
@@ -174,7 +175,4 @@ public class RetroPickerFragment extends Fragment {
         this.callbackPicker = callbackPicker;
     }
 
-    public void setContext(Activity context) {
-        this.activity = context;
-    }
 }
