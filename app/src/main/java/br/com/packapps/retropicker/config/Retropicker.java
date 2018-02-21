@@ -11,15 +11,15 @@ import br.com.packapps.retropicker.fragments.RetroPickerFragment;
  * Created by paulo.linhares on 08/02/18.
  */
 
-public class Retropicker extends RetropickerBuilder {
+public class Retropicker {
+    private RetropickerBuilder builder;
 
     private Throwable throwable;
     public static final int CAMERA_PICKER = 0;
-
     private RetroPickerFragment retroPickerFragment;
 
-    public Retropicker(Activity activity) {
-        super(activity);
+    public Retropicker(RetropickerBuilder builder) {
+        this.builder = builder;
     }
 
 
@@ -46,10 +46,10 @@ public class Retropicker extends RetropickerBuilder {
     private void enquee() {
 
         if (throwable != null){
-            getCallbackPicker().onFailure(throwable);
+            builder.getCallbackPicker().onFailure(throwable);
         }else{
             //call
-            retroPickerFragment.setCallBack(getCallbackPicker());
+            retroPickerFragment.setCallBack(builder.getCallbackPicker());
         }
 
     }
@@ -64,8 +64,8 @@ public class Retropicker extends RetropickerBuilder {
 
         if (throwable == null){
             //TODO without support fragment. Pending
-            retroPickerFragment = RetroPickerFragment.newInstance(getTypeAction(), null);
-            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), null);
+            FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
             ft.add(retroPickerFragment, "RETROPICKER_FRAGMENT");
             ft.commit();
         }
@@ -104,7 +104,7 @@ public class Retropicker extends RetropickerBuilder {
         }
 
         public Retropicker create() {
-            return ((Retropicker)rb);
+            return new Retropicker(rb);
         }
     }
 }
