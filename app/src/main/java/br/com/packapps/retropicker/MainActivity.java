@@ -2,6 +2,7 @@ package br.com.packapps.retropicker;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,26 +22,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imageView = (ImageView) findViewById(R.id.imageView);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
     }
 
     public void btActionImage(View view) {
 
-        Retropicker retropicker = Retropicker.createAction(this, getPackageName(), Retropicker.CAMERA_PICKER, "first_image.jpg");
+        Retropicker.Builder builder =  new Retropicker.Builder(this)
+                .setPackageName(getPackageName())
+                .setTypeAction(Retropicker.CAMERA_PICKER)
+                .setImageName("first_image.jpg");
 
-        retropicker.enquee(new CallbackPicker() {
+        builder.enquee(new CallbackPicker() {
             @Override
             public void onSuccess(Bitmap bitmap, String imagePath) {
-                Toast.makeText(MainActivity.this, "bitmap: " + bitmap, Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, "imagePath: " + imagePath, Toast.LENGTH_SHORT).show();
                 imageView.setImageBitmap(bitmap);
             }
 
             @Override
             public void onFailure(Throwable error) {
                 Toast.makeText(MainActivity.this, "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
+
+        Retropicker retropicker = builder.create();
+        retropicker.open();
 
     }
 }
