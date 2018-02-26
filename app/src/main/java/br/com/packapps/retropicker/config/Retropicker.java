@@ -23,26 +23,6 @@ public class Retropicker {
     }
 
 
-//    private Retropicker(Activity context, String packageApp, int actionType, String imageName) {
-//        this.context = context;
-//        this.packageApp = packageApp;
-//        this.actionType = actionType;
-//        this.imageName  = imageName;
-//
-//        throwable = isValidate();
-//
-//        if (throwable == null){
-//            //TODO without support fragment. Pending
-//            retroPickerFragment = RetroPickerFragment.newInstance(actionType, null);
-//            FragmentTransaction ft = context.getFragmentManager().beginTransaction();
-//            ft.add(retroPickerFragment, "RETROPICKER_FRAGMENT");
-//            ft.commit();
-//        }
-//
-//    }
-
-
-
     private void enquee() {
 
         if (throwable != null){
@@ -74,11 +54,10 @@ public class Retropicker {
 
     }
 
-//    public static Retropicker createAction(Activity context, String packageName, int photoPicker, String imageName) {
-//        return new Retropicker(context, packageName, photoPicker, imageName);
-//    }
 
-
+    /**
+     * Class Builder for init data and configs at this Library
+     */
     public static class Builder {
         RetropickerBuilder rb;
 
