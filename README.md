@@ -9,10 +9,10 @@
 
 ```
  allprojects {
-            repositories {
-                        ...
-                        maven { url 'https://jitpack.io' }
-            }
+       repositories {
+              ...
+              maven { url 'https://jitpack.io' }
+       }
 }
 ```
 
@@ -20,7 +20,7 @@
 
 ```
 dependencies {
-        compile 'com.github.PauloLinhares09:RetroPicker:1.0.1' 
+    compile 'com.github.PauloLinhares09:RetroPicker:1.0.1' 
 }
 ```
 
@@ -28,7 +28,8 @@ dependencies {
 ## 3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de 
 botão (Câmera ou Galeria):
 
->Retropicker.Builder builder =  new Retropicker.Builder(this)
+```
+Retropicker.Builder builder =  new Retropicker.Builder(this)
             .setPackageName(getPackageName())
             .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
             .setImageName("first_image.jpg"); //Opicional
@@ -50,6 +51,7 @@ botão (Câmera ou Galeria):
     retropicker.open();
 
 }
+```
 
 
   
