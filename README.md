@@ -5,7 +5,7 @@
 
 # Get started
 
-## 1 - Adicione em seu root build.gradle dentro e no final da tag repositories:
+## 1 - Adicione em seu root build.gradle no final dentro da tag repositories:
 
 ```
  allprojects {
