@@ -24,6 +24,7 @@ import java.util.Date;
 import br.com.packapps.retropicker.Util.Const;
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.config.Retropicker;
+import br.com.packapps.retropicker.throwables.TypeActionRetroPickerException;
 
 import static android.content.ContentValues.TAG;
 
@@ -195,38 +196,51 @@ public class RetroPickerFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         //###Camera
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == activity.RESULT_OK){
-            Log.d(TAG, "result from Camera");
             //getting photo for mCurrentImage
             //set image pic
-            Bitmap bitmap = null;
-            try {
-                bitmap = getPicBitmap();
-                callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
-            } catch (IOException e) {
-                callbackPicker.onFailure(e);
-                e.printStackTrace();
-            }
-
+            executeActionResult(Retropicker.CAMERA_PICKER, data);
 
         }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == activity.RESULT_OK){
-            Log.d(TAG, "result from Gallery");
 
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-                Log.i("TAG", "Uri: " + uri.toString());
-                mCurrentPhotoPath = uri.toString();
+            executeActionResult(Retropicker.GALLERY_PICKER, data);
+        }
+    }
+
+    private void executeActionResult(int typeAction, Intent data) {
+
+        switch (typeAction) {
+            case Retropicker.CAMERA_PICKER:
+                Bitmap bitmap = null;
                 try {
-                    Bitmap bitmap = getBitmapFromUri(uri);
+                    bitmap = getPicBitmap();
                     callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
                 } catch (IOException e) {
-                    Log.e(TAG, "error getting bitmap from image comming gallery" );
                     callbackPicker.onFailure(e);
                     e.printStackTrace();
                 }
+                break;
+
+            case Retropicker.GALLERY_PICKER:
+                Uri uri = null;
+                if (data != null) {
+                    uri = data.getData();
+                    mCurrentPhotoPath = uri.toString();
+                    try {
+                        bitmap = getBitmapFromUri(uri);
+                        callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
+                    } catch (IOException e) {
+                        callbackPicker.onFailure(e);
+                        e.printStackTrace();
+                    }
+
+                }
+                break;
+            default:
+                callbackPicker.onFailure(
+                        new TypeActionRetroPickerException("typeAction=" + typeAction + " is not type value valid. Try RetroPicker.CAMERA_PICKER or RetroPicker.GALERY_PICKER. " +
+                        "Example: builder.setTypeAction(RetroPicker.CAMERA_PICKER)", typeAction));
 
 
-            }
         }
     }
 

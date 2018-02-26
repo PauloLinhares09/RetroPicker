@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         Retropicker.Builder builder =  new Retropicker.Builder(this)
                 .setPackageName(getPackageName())
-                .setTypeAction(Retropicker.GALLERY_PICKER)
+                .setTypeAction(Retropicker.CAMERA_PICKER)
                 .setImageName("first_image.jpg");
 
         builder.enquee(new CallbackPicker() {
