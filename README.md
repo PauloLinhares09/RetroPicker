@@ -25,8 +25,7 @@ dependencies {
 ```
 
 
-## 3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de 
-### botão (Câmera ou Galeria):
+## 3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de botão (Câmera ou Galeria):
 
 ```
 Retropicker.Builder builder =  new Retropicker.Builder(this)
