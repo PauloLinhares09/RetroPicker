@@ -20,7 +20,7 @@
 
 ```
 dependencies {
-    compile 'com.github.PauloLinhares09:RetroPicker:1.0.1' 
+    compile 'com.github.PauloLinhares09:RetroPicker:1.0.2' 
 }
 ```
 
@@ -29,7 +29,6 @@ dependencies {
 
 ```
 Retropicker.Builder builder =  new Retropicker.Builder(this)
-            .setPackageName(getPackageName())
             .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
             .setImageName("first_image.jpg"); //Opicional
 
