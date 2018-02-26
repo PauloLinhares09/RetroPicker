@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,15 +25,18 @@ import br.com.packapps.retropicker.Util.Const;
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.config.Retropicker;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * @Author Paulo linhares 20/02/2018
  */
 public class RetroPickerFragment extends Fragment {
 
-
     private static final int REQUEST_TAKE_PHOTO = 100;
+    private static final int REQUEST_OPEN_GALLERY = 101;
 
     private static final String ARG_PARAM2 = "param2";
+
 
     private int actionType;
     private String mParam2;
@@ -79,12 +84,23 @@ public class RetroPickerFragment extends Fragment {
             case Retropicker.CAMERA_PICKER:
                 callCameraIntent();
                 break;
+            case Retropicker.GALLERY_PICKER:
+                openGallery();
+                break;
             //TODO gallery
         }
     }
 
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+
+        startActivityForResult(intent, REQUEST_OPEN_GALLERY);
+    }
+
     //open intent at camera
-    public void callCameraIntent() {
+    private void callCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -128,7 +144,7 @@ public class RetroPickerFragment extends Fragment {
     }
 
 
-    private Bitmap getPicBitmap() {
+    private Bitmap getPicBitmap() throws IOException {
 
 	    /* Get the size of the ImageView */
 //        int targetW = ivPhotoDoc.getWidth();
@@ -163,6 +179,15 @@ public class RetroPickerFragment extends Fragment {
 
     }
 
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                activity.getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+
 
 
     @Override
@@ -170,10 +195,38 @@ public class RetroPickerFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         //###Camera
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == activity.RESULT_OK){
+            Log.d(TAG, "result from Camera");
             //getting photo for mCurrentImage
             //set image pic
-            Bitmap bitmap = getPicBitmap();
-            callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
+            Bitmap bitmap = null;
+            try {
+                bitmap = getPicBitmap();
+                callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
+            } catch (IOException e) {
+                callbackPicker.onFailure(e);
+                e.printStackTrace();
+            }
+
+
+        }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == activity.RESULT_OK){
+            Log.d(TAG, "result from Gallery");
+
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.i("TAG", "Uri: " + uri.toString());
+                mCurrentPhotoPath = uri.toString();
+                try {
+                    Bitmap bitmap = getBitmapFromUri(uri);
+                    callbackPicker.onSuccess(bitmap, mCurrentPhotoPath);
+                } catch (IOException e) {
+                    Log.e(TAG, "error getting bitmap from image comming gallery" );
+                    callbackPicker.onFailure(e);
+                    e.printStackTrace();
+                }
+
+
+            }
         }
     }
 
