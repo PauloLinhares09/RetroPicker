@@ -8,9 +8,13 @@
 ## 1 - Adicione em seu root build.gradle dentro e no final da tag repositories:
 
 > allprojects {
+
 >		repositories {
+
 >			...
+
 >			maven { url 'https://jitpack.io' }
+
 >		}
 >}
 
