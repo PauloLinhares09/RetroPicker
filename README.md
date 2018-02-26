@@ -30,7 +30,7 @@ dependencies {
 ```
 Retropicker.Builder builder =  new Retropicker.Builder(this)
             .setPackageName(getPackageName())
-            .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
+            .setTypeAction(Retropicker.CAMERA_PICKER) _//Para abrir a galeria passe Retropicker.GALLERY_PICKER_
             .setImageName("first_image.jpg"); //Opicional
 
     builder.enquee(new CallbackPicker() {
