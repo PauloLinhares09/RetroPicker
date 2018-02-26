@@ -88,7 +88,6 @@ public class RetroPickerFragment extends Fragment {
             case Retropicker.GALLERY_PICKER:
                 openGallery();
                 break;
-            //TODO gallery
         }
     }
 
