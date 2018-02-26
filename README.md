@@ -1,11 +1,11 @@
 # RetroPicker
 
-Economize tempo - e porquê não dinheiro. 
-Adicione, com poucas linhas de código, as ações de Galeria e captura de Fotos em seu Aplicativo android.
+## Economize tempo - e porquê não dinheiro. 
+###### Adicione, com poucas linhas de código, as ações de Galeria e captura de Fotos em seu Aplicativo android.
 
-Get start
+# Get started
 
-1 - Adicione em seu root build.gradle dentro e no final da tag repositories:
+## 1 - Adicione em seu root build.gradle dentro e no final da tag repositories:
 
 allprojects {
 		repositories {
@@ -14,14 +14,14 @@ allprojects {
 		}
 }
 
-2 - Adicione a dependência:
+## 2 - Adicione a dependência:
 
 dependencies {
         compile 'com.github.PauloLinhares09:RetroPicker:1.0.1' 
 }
 
 
-3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de 
+## 3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de 
 botão (Câmera ou Galeria):
 
 Retropicker.Builder builder =  new Retropicker.Builder(this)
