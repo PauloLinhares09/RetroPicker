@@ -66,6 +66,7 @@ public class Retropicker {
 
         public Builder setTypeAction(int typeAction) {
             rb.setThrowable(ControllerThroable.analiseTypeActionPicker(typeAction));
+            rb.setTypeAction(typeAction);
             return this;
         }
 

@@ -61,22 +61,26 @@ public class RetroPickerFragment extends Fragment {
             actionType = getArguments().getInt(Const.Params.TYPE_ACTION);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //### axecute action
+        executeAction();
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d("TAG", "onAttach");
         this.activity = (Activity) context;
+    }
 
+    private void executeAction() {
         switch (actionType){
             case Retropicker.CAMERA_PICKER:
                 callCameraIntent();
                 break;
-                //TODO gallery
+            //TODO gallery
         }
-
-
     }
 
     //open intent at camera

@@ -24,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
     }
 
     public void btActionImage(View view) {
 
         Retropicker.Builder builder =  new Retropicker.Builder(this)
                 .setPackageName(getPackageName())
-                .setTypeAction(123)
+                .setTypeAction(Retropicker.CAMERA_PICKER)
                 .setImageName("first_image.jpg");
 
         builder.enquee(new CallbackPicker() {

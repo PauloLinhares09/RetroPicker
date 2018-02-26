@@ -12,6 +12,9 @@ public class ControllerThroable {
         if (typeAction == Retropicker.CAMERA_PICKER || typeAction == Retropicker.GALLERY_PICKER)
             return null;
 
-        return new TypeActionRetroPickerException("typeAction=" + typeAction + " is not type value valid. Try RetroPicker.CAMERA_PICKER or RetroPicker.GALERY_PICKER. Example: builder.setTypeAction(RetroPicker.CAMERA_PICKER)", typeAction);
+        return new TypeActionRetroPickerException("typeAction=" + typeAction + " is not type value valid. Try RetroPicker.CAMERA_PICKER or RetroPicker.GALERY_PICKER. " +
+                "Example: builder.setTypeAction(RetroPicker.CAMERA_PICKER)", typeAction);
     }
+
+
 }
