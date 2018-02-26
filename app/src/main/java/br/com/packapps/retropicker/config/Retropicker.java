@@ -60,9 +60,9 @@ public class Retropicker {
             rb = new RetropickerBuilder(activity);
         }
 
-        public Builder setPackageName(String packageName) {
-            return this;
-        }
+//        public Builder setPackageName(String packageName) {
+//            return this;
+//        }
 
         public Builder setTypeAction(int typeAction) {
             rb.setThrowable(ControllerThroable.analiseTypeActionPicker(typeAction));

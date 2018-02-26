@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public void btActionImage(View view) {
 
         Retropicker.Builder builder =  new Retropicker.Builder(this)
-                .setPackageName(getPackageName())
                 .setTypeAction(Retropicker.CAMERA_PICKER)
                 .setImageName("first_image.jpg");
 
