@@ -14,6 +14,7 @@ class RetropickerBuilder {
     private int typeAction;
     private String imageName;
     private CallbackPicker callbackPicker;
+    private Throwable throwable;
 
     public RetropickerBuilder(Activity activity) {
         this.activity = activity;
@@ -57,5 +58,13 @@ class RetropickerBuilder {
 
     public void setCallbackPicker(CallbackPicker callbackPicker) {
         this.callbackPicker = callbackPicker;
+    }
+
+    public Throwable getThrowable() {
+        return throwable;
+    }
+
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
     }
 }

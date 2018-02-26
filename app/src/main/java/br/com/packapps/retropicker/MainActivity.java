@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         Retropicker.Builder builder =  new Retropicker.Builder(this)
                 .setPackageName(getPackageName())
-                .setTypeAction(Retropicker.CAMERA_PICKER)
+                .setTypeAction(123)
                 .setImageName("first_image.jpg");
 
         builder.enquee(new CallbackPicker() {
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error) {
-                Toast.makeText(MainActivity.this, "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", "error: " + error.getMessage());
             }
         });
 
