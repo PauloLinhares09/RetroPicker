@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 
 import br.com.packapps.retropicker.MainActivity;
 import br.com.packapps.retropicker.callback.CallbackPicker;
+import br.com.packapps.retropicker.controller.ControllerThroable;
 import br.com.packapps.retropicker.fragments.RetroPickerFragment;
 
 /**
@@ -12,10 +13,9 @@ import br.com.packapps.retropicker.fragments.RetroPickerFragment;
  */
 
 public class Retropicker {
+    public static final int CAMERA_PICKER = 900;
+    public static final int GALLERY_PICKER = 901;
     private RetropickerBuilder builder;
-
-    private Throwable throwable;
-    public static final int CAMERA_PICKER = 0;
     private RetroPickerFragment retroPickerFragment;
 
     public Retropicker(RetropickerBuilder builder) {
@@ -25,8 +25,8 @@ public class Retropicker {
 
     private void enquee() {
 
-        if (throwable != null){
-            builder.getCallbackPicker().onFailure(throwable);
+        if (builder.getThrowable() != null){
+            builder.getCallbackPicker().onFailure(builder.getThrowable());
         }else{
             //call
             retroPickerFragment.setCallBack(builder.getCallbackPicker());
@@ -34,15 +34,10 @@ public class Retropicker {
 
     }
 
-    private static Throwable isValidate() {
-
-        return null;
-    }
 
     public void open() {
-        throwable = isValidate();
 
-        if (throwable == null){
+        if (builder.getThrowable() == null){
             //TODO without support fragment. Pending
             retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), null);
             FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
@@ -59,7 +54,7 @@ public class Retropicker {
      * Class Builder for init data and configs at this Library
      */
     public static class Builder {
-        RetropickerBuilder rb;
+        private RetropickerBuilder rb;
 
         public Builder(Activity activity) {
             rb = new RetropickerBuilder(activity);
@@ -70,6 +65,7 @@ public class Retropicker {
         }
 
         public Builder setTypeAction(int typeAction) {
+            rb.setThrowable(ControllerThroable.analiseTypeActionPicker(typeAction));
             return this;
         }
 

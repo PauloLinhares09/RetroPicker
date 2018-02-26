@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error) {
-                Toast.makeText(MainActivity.this, "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", "error: " + error.getMessage());
+                Log.e("TAG", "error toString: " + error.toString());
             }
         });
 
