@@ -52,4 +52,4 @@ Retropicker.Builder builder =  new Retropicker.Builder(this)
 }
 ```
 
-OBS: Esta biblioteca está em Beta 1. Portanto, alterações a nível de extrutura ainda podem sofrer alterações. Caso deseje utiliza-la em um projeto já em produção, você deve ter em mente que pode chegar um momento de necessitar mudar sua implementação - ou não.  
+OBS: Esta biblioteca está em Beta 1. Portanto, alterações a nível de estrutura ainda podem acontecer. Caso deseje utiliza-la em um projeto já em produção, você deve ter em mente que pode chegar um momento de necessitar mudar sua implementação - ou não.  
