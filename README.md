@@ -1,4 +1,4 @@
-# RetroPicker
+# RetroPicker - BETA 1
 
 ## Economize tempo - e porquê não dinheiro. 
 > Adicione, com poucas linhas de código, as ações de Galeria e captura de Fotos em seu Aplicativo android.
