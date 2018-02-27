@@ -25,8 +25,9 @@ dependencies {
 ```
 
 
-## 3 - Adicionado as configuraçes acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de botão (Câmera ou Galeria):
+## 3 - Adicionado as configurações acima e feito "sync" em seu projeto, basta chamar o seguinte código em sua ação de botão (Câmera ou Galeria):
 
+##### public void yourButtonAction(View view){
 ```
 Retropicker.Builder builder =  new Retropicker.Builder(this)
             .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
@@ -50,5 +51,6 @@ Retropicker.Builder builder =  new Retropicker.Builder(this)
 
 }
 ```
+##### }
 
 OBS: Esta biblioteca está em Beta 1. Portanto, alterações a nível de estrutura ainda podem acontecer. Caso deseje utiliza-la em um projeto já em produção, você deve ter em mente que pode chegar um momento de necessitar mudar sua implementação - ou não.  
