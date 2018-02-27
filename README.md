@@ -29,27 +29,27 @@ dependencies {
 
 > public void yourButtonAction(View view){
 ```
-Retropicker.Builder builder =  new Retropicker.Builder(this)
-            .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
-            .setImageName("first_image.jpg"); //Opicional
+       Retropicker.Builder builder =  new Retropicker.Builder(this)
+                   .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
+                   .setImageName("first_image.jpg"); //Opicional
 
-    builder.enquee(new CallbackPicker() {
-        @Override
-        public void onSuccess(Bitmap bitmap, String imagePath) {
-            imageView.setImageBitmap(bitmap); //ImageView do seu aplicativo onde quer exibir a imagem final
-        }
+           builder.enquee(new CallbackPicker() {
+               @Override
+               public void onSuccess(Bitmap bitmap, String imagePath) {
+                   imageView.setImageBitmap(bitmap); //ImageView do seu aplicativo onde quer exibir a imagem final
+               }
 
-        @Override
-        public void onFailure(Throwable error) {
-            Log.e("TAG", "error: " + error.getMessage());
-            Log.e("TAG", "error toString: " + error.toString());
-        }
-    });
+               @Override
+               public void onFailure(Throwable error) {
+                   Log.e("TAG", "error: " + error.getMessage());
+                   Log.e("TAG", "error toString: " + error.toString());
+               }
+           });
 
-    Retropicker retropicker = builder.create();
-    retropicker.open();
+           Retropicker retropicker = builder.create();
+           retropicker.open();
 
-}
+       }
 ```
 > }
 
