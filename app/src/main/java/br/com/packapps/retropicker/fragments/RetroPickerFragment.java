@@ -1,8 +1,10 @@
 package br.com.packapps.retropicker.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +13,9 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
@@ -36,8 +41,6 @@ public class RetroPickerFragment extends Fragment {
     private static final int REQUEST_TAKE_PHOTO = 100;
     private static final int REQUEST_OPEN_GALLERY = 101;
 
-    private static final String ARG_PARAM2 = "param2";
-
 
     private int actionType;
     private String mParam2;
@@ -45,17 +48,18 @@ public class RetroPickerFragment extends Fragment {
     private String mCurrentPhotoPath;
     private CallbackPicker callbackPicker;
     private Activity activity;
+    private boolean checkpermission;
 
     public RetroPickerFragment() {
         // Required empty public constructor
     }
 
 
-    public static RetroPickerFragment newInstance(int type_action, String param2) {
+    public static RetroPickerFragment newInstance(int type_action, boolean checkpermission) {
         RetroPickerFragment fragment = new RetroPickerFragment();
         Bundle args = new Bundle();
         args.putInt(Const.Params.TYPE_ACTION, type_action);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(Const.Params.CHECK_PERMISSION, checkpermission);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,11 +69,11 @@ public class RetroPickerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             actionType = getArguments().getInt(Const.Params.TYPE_ACTION);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            checkpermission = getArguments().getBoolean(Const.Params.CHECK_PERMISSION);
         }
 
         //### axecute action
-        executeAction();
+        executeAction(checkpermission);
     }
 
 
@@ -80,15 +84,44 @@ public class RetroPickerFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    private void executeAction() {
+    private void executeAction(boolean checkPermission) {
         switch (actionType){
             case Retropicker.CAMERA_PICKER:
-                callCameraIntent();
+                //TODO verify permissions
+                if (!checkPermission)
+                    callCameraIntent();
+                else{
+                    mCheckPermission();
+                }
                 break;
             case Retropicker.GALLERY_PICKER:
                 openGallery();
                 break;
         }
+    }
+
+    private void mCheckPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+
+                // TODO: provider this option to the user, to show a view
+
+            } else {
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        Const.MY_PERMISSIONS_REQUEST_CAMERA);
+
+            }
+        }else{
+            executeAction(false);
+        }
+
+
     }
 
     private void openGallery() {
@@ -247,4 +280,21 @@ public class RetroPickerFragment extends Fragment {
         this.callbackPicker = callbackPicker;
     }
 
+
+
+    public void MyOnRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Const.MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    executeAction(false);
+                } else {
+                    //TODO what to do?
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
+    }
 }
