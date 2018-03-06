@@ -75,6 +75,7 @@ public class RetroPickerFragment extends Fragment {
 
         //### axecute action
         executeAction(checkpermission);
+
     }
 
 
@@ -89,6 +90,7 @@ public class RetroPickerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("TAG", "onResume");
+
     }
 
     private void executeAction(boolean checkPermission) {
@@ -116,12 +118,11 @@ public class RetroPickerFragment extends Fragment {
                     Manifest.permission.CAMERA)) {
 
                 // TODO: provider this option to the user, to show a view
+                requestActionPermissionToUser();
 
             } else {
 
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.CAMERA},
-                        Const.MY_PERMISSIONS_REQUEST_CAMERA);
+                requestActionPermissionToUser();
 
             }
         }else{
@@ -129,6 +130,12 @@ public class RetroPickerFragment extends Fragment {
         }
 
 
+    }
+
+    private void requestActionPermissionToUser() {
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{Manifest.permission.CAMERA},
+                Const.MY_PERMISSIONS_REQUEST_CAMERA);
     }
 
     private void openGallery() {
