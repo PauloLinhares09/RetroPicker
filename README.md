@@ -66,7 +66,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
 }
 ```
 NOTA: Observe que estamos usando uma instância global (retropicker) para nossa referência da Library RetroPicker. Portanto, 
-atualize seu código acima para ter esta instãncia acessivel globalmente pela sua Activity ou Fragment.
+atualize seu código acima para ter esta instância acessível globalmente pela sua Activity ou Fragment.
 
 ---------------------------------------------------
 
