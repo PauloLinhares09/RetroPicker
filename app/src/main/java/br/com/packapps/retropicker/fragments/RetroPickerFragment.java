@@ -31,8 +31,6 @@ import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.config.Retropicker;
 import br.com.packapps.retropicker.throwables.TypeActionRetroPickerException;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * @Author Paulo linhares 20/02/2018
  */
@@ -96,46 +94,77 @@ public class RetroPickerFragment extends Fragment {
     private void executeAction(boolean checkPermission) {
         switch (actionType){
             case Retropicker.CAMERA_PICKER:
-                //TODO verify permissions
                 if (!checkPermission)
                     callCameraIntent();
-                else{
-                    mCheckPermission();
-                }
+                else
+                    mCheckPermission(Retropicker.CAMERA_PICKER);
+
                 break;
             case Retropicker.GALLERY_PICKER:
-                openGallery();
+                if (!checkPermission)
+                    openGallery();
+                else
+                    mCheckPermission(Retropicker.GALLERY_PICKER);
+
                 break;
         }
     }
 
-    private void mCheckPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+    private void mCheckPermission(int actionType) {
+        switch (actionType) {
+            case Retropicker.CAMERA_PICKER:
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.CAMERA)) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                // TODO: provider this option to the user, to show a view
-                requestActionPermissionToUser();
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            Manifest.permission.CAMERA)) {
 
-            } else {
+                        // TODO: provider this option layout info to the user
+                        requestActionPermissionToUser(Manifest.permission.CAMERA, Const.MY_PERMISSIONS_REQUEST_CAMERA);
 
-                requestActionPermissionToUser();
+                    } else {
 
-            }
-        }else{
-            executeAction(false);
+                        requestActionPermissionToUser(Manifest.permission.CAMERA, Const.MY_PERMISSIONS_REQUEST_CAMERA);
+
+                    }
+                } else {
+                    executeAction(false);
+                }
+
+                break;
+
+            case Retropicker.GALLERY_PICKER:
+
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                        // TODO: provider this option layout info to the user
+                        requestActionPermissionToUser(Manifest.permission.READ_EXTERNAL_STORAGE, Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+
+                    } else {
+
+                        requestActionPermissionToUser(Manifest.permission.READ_EXTERNAL_STORAGE, Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+
+                    }
+                } else {
+                    executeAction(false);
+                }
+
+                break;
         }
-
 
     }
 
-    private void requestActionPermissionToUser() {
+    private void requestActionPermissionToUser(String permissionType, int requestCodeType) {
         ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.CAMERA},
-                Const.MY_PERMISSIONS_REQUEST_CAMERA);
+                new String[]{permissionType},
+                requestCodeType);
     }
 
     private void openGallery() {
@@ -296,9 +325,9 @@ public class RetroPickerFragment extends Fragment {
 
 
 
-    public void MyOnRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void myOnRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Const.MY_PERMISSIONS_REQUEST_CAMERA: {
+            case Const.MY_PERMISSIONS_REQUEST_CAMERA:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     executeAction(false);
@@ -307,8 +336,21 @@ public class RetroPickerFragment extends Fragment {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
-            }
+
+                break;
+
+            case Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    executeAction(false);
+                } else {
+                    //TODO what to do?
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                break;
         }
     }
+
 }

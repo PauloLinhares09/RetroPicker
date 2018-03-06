@@ -2,9 +2,7 @@ package br.com.packapps.retropicker.config;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.pm.PackageManager;
 
-import br.com.packapps.retropicker.MainActivity;
 import br.com.packapps.retropicker.Util.Const;
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.controller.ControllerThroable;
@@ -54,7 +52,7 @@ public class Retropicker {
     }
 
     public void onRequesPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
-        retroPickerFragment.MyOnRequestPermissionsResult(requestCode, permissions, grantResults);
+        retroPickerFragment.myOnRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 

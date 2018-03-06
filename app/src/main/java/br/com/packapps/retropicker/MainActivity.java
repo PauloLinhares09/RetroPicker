@@ -56,6 +56,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
+    public void openGalery(View view) {
+
+        Retropicker.Builder builder =  new Retropicker.Builder(this)
+                .setTypeAction(Retropicker.GALLERY_PICKER)
+                .setImageName("first_image.jpg")
+                .checkPermission(true);
+
+
+        builder.enquee(new CallbackPicker() {
+            @Override
+            public void onSuccess(Bitmap bitmap, String imagePath) {
+                imageView.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onFailure(Throwable error) {
+                Log.e("TAG", "error: " + error.getMessage());
+                Log.e("TAG", "error toString: " + error.toString());
+            }
+        });
+
+        retropicker = builder.create();
+        retropicker.open();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
