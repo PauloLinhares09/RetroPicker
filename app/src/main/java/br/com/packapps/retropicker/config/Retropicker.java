@@ -40,11 +40,13 @@ public class Retropicker {
     public void open() {
 
         if (builder.getThrowable() == null){
-            //TODO without support fragment. Pending
-            retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), builder.isCheckPermission());
-            FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
-            ft.add(retroPickerFragment, Const.RETROPICKER_FRAGMENT_TAG);
-            ft.commit();
+            if (retroPickerFragment == null) {
+                //TODO without support fragment. Pending
+                retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), builder.isCheckPermission());
+                FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
+                ft.add(retroPickerFragment, Const.RETROPICKER_FRAGMENT_TAG);
+                ft.commit();
+            }
         }
 
         enquee();

@@ -67,6 +67,7 @@ public class RetroPickerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TAG", "onCreate");
         if (getArguments() != null) {
             actionType = getArguments().getInt(Const.Params.TYPE_ACTION);
             checkpermission = getArguments().getBoolean(Const.Params.CHECK_PERMISSION);
@@ -82,6 +83,12 @@ public class RetroPickerFragment extends Fragment {
         super.onAttach(context);
         Log.d("TAG", "onAttach");
         this.activity = (Activity) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "onResume");
     }
 
     private void executeAction(boolean checkPermission) {
