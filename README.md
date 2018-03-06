@@ -31,7 +31,8 @@ dependencies {
 ```
        Retropicker.Builder builder =  new Retropicker.Builder(this)
                    .setTypeAction(Retropicker.CAMERA_PICKER) //Para abrir a galeria passe Retropicker.GALLERY_PICKER
-                   .setImageName("first_image.jpg"); //Opicional
+                   .setImageName("first_image.jpg") //Opicional
+                   .checkPermission(true);
 
            builder.enquee(new CallbackPicker() {
                @Override
@@ -52,5 +53,21 @@ dependencies {
        }
 ```
 > }
+
+
+## 4 - Implemente o método onRequestPermissionsResult(...) em sua Activity de contexto deste uso em seu APP:
+```
+@Override
+public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+       //Call this line fir manager RetroPicker Library
+       retropicker.onRequesPermissionResult(requestCode, permissions, grantResults);
+
+}
+```
+NOTA: Observe que estamos usando uma instância global (retropicker) para nossa referência da Library RetroPicker. Portanto, 
+atualize seu código acima para ter esta instãncia acessivel globalmente pela sua Activity ou Fragment.
+
+---------------------------------------------------
 
 OBS: Esta biblioteca está em Beta 1. Portanto, alterações a nível de estrutura ainda podem acontecer. Caso deseje utiliza-la em um projeto já em produção, você deve ter em mente que pode chegar um momento de necessitar mudar sua implementação - ou não.  
