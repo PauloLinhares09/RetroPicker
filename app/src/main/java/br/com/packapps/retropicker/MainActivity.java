@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d("TAG", "requestCode: " + requestCode);
-        Log.d("TAG", "permission: " + permissions[0]);
 
         retropicker.onRequesPermissionResult(requestCode, permissions, grantResults);
 

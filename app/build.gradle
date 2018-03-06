@@ -1,10 +1,9 @@
-apply plugin: 'com.android.application'
-//TODO paulolinhares
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "br.com.packapps.retropicker"
+//        applicationId "br.com.packapps.retropicker"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
