@@ -179,22 +179,23 @@ public class RetroPickerFragment extends Fragment {
     private void callCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(activity.getApplicationContext().getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                Toast.makeText(activity, "Erro ao abrir a câmera. Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                //TODO: callback as listener
+                Toast.makeText(getActivity(), "Erro ao abrir a câmera. Por favor tente novamente.", Toast.LENGTH_SHORT).show();
                 mCurrentPhotoPath = null;
                 ex.printStackTrace();
 
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(activity,
-                        activity.getApplicationContext().getPackageName() + ".fileprovider",
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        getActivity().getPackageName() + ".fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
@@ -207,7 +208,7 @@ public class RetroPickerFragment extends Fragment {
         // Create an image file_paths name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = activity.getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -257,7 +258,7 @@ public class RetroPickerFragment extends Fragment {
 
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
-                activity.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r");
+                getActivity().getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
         Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
         parcelFileDescriptor.close();
@@ -270,12 +271,12 @@ public class RetroPickerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //###Camera
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == activity.RESULT_OK){
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK){
             //getting photo for mCurrentImage
             //set image pic
             executeActionResult(Retropicker.CAMERA_PICKER, data);
 
-        }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == activity.RESULT_OK){
+        }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == getActivity().RESULT_OK){
 
             executeActionResult(Retropicker.GALLERY_PICKER, data);
         }
