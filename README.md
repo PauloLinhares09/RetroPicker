@@ -1,7 +1,10 @@
 # RetroPicker - BETA 1
 
-## Economize tempo - e porquê não dinheiro. 
-> Adicione, com poucas linhas de código, as ações de Galeria e captura de Fotos em seu Aplicativo Android. E mais, tratamento de permissões em tempo de execução para Android 6+ já embutido, para você não ter trabalho algum. 
+## Economize tempo no desenvolvimento. 
+
+>Trabalhar com Ações de mídias no Android, envolvendo Câmera e Galeria, pode ser um processo tardio para sua produtividade - principalmente por volume de regras que precisam ser seguidas, como: tratar Request Runtime Permissions(Android 6+), respeitar as regras de compartilhamento de arquivos(isso envolve as fotos) com Providers (Android 7+).
+
+>Baseado nisso e muitos outros fatores, essa Lib tenta fazer todo o trabalho mais pesado para que você possa depositar seu tempo apenas nas peculiaridades do seu Aplicativo. Vamos lá?
 
 # Get started
 
@@ -20,7 +23,7 @@ allprojects {
 
 ```
 dependencies {
-    compile 'com.github.PauloLinhares09:RetroPicker:1.0.2' 
+    compile 'com.github.PauloLinhares09:RetroPicker:1.2.0-Beta1' 
 }
 ```
 
