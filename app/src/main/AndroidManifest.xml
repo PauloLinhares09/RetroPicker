@@ -13,9 +13,7 @@
     <!--android:supportsRtl="true"-->
     <!--android:theme="@style/AppTheme"-->
 
-    <application
-        android:allowBackup="false"
-        >
+    <application>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
