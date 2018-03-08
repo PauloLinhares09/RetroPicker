@@ -23,7 +23,7 @@ allprojects {
 
 ```
 dependencies {
-    compile 'com.github.PauloLinhares09:RetroPicker:1.2.0-Beta1' 
+    compile 'com.github.PauloLinhares09:RetroPicker:1.2.2-Beta1' 
 }
 ```
 
