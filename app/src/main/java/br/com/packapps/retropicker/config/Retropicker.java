@@ -3,18 +3,20 @@ package br.com.packapps.retropicker.config;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 
-import br.com.packapps.retropicker.MainActivity;
 import br.com.packapps.retropicker.callback.CallbackPicker;
-import br.com.packapps.retropicker.controller.ControllerThroable;
+import br.com.packapps.retropicker.controller.ControllerThrowable;
 import br.com.packapps.retropicker.fragments.RetroPickerFragment;
+import br.com.packapps.retropicker.interfaces.RetroPickerContract;
 
 /**
  * Created by paulo.linhares on 08/02/18.
+ * Altered by gabrielnovaes on  01/10/18
  */
 
-public class Retropicker {
+public class Retropicker  implements RetroPickerContract {
     public static final int CAMERA_PICKER = 900;
     public static final int GALLERY_PICKER = 901;
+
     private RetropickerBuilder builder;
     private RetroPickerFragment retroPickerFragment;
 
@@ -23,7 +25,8 @@ public class Retropicker {
     }
 
 
-    private void enquee() {
+    @Override
+    public void enquee() {
 
         if (builder.getThrowable() != null){
             builder.getCallbackPicker().onFailure(builder.getThrowable());
@@ -31,10 +34,9 @@ public class Retropicker {
             //call
             retroPickerFragment.setCallBack(builder.getCallbackPicker());
         }
-
     }
 
-
+    @Override
     public void open() {
 
         if (builder.getThrowable() == null){
@@ -46,7 +48,6 @@ public class Retropicker {
         }
 
         enquee();
-
     }
 
 
@@ -65,7 +66,7 @@ public class Retropicker {
 //        }
 
         public Builder setTypeAction(int typeAction) {
-            rb.setThrowable(ControllerThroable.analiseTypeActionPicker(typeAction));
+            rb.setThrowable(ControllerThrowable.analiseTypeActionPicker(typeAction));
             rb.setTypeAction(typeAction);
             return this;
         }

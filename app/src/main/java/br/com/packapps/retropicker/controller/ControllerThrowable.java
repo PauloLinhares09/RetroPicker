@@ -7,7 +7,7 @@ import br.com.packapps.retropicker.throwables.TypeActionRetroPickerException;
  * Created by paulo.linhares on 26/02/18.
  */
 
-public class ControllerThroable {
+public class ControllerThrowable {
     public static Throwable analiseTypeActionPicker(int typeAction) {
         if (typeAction == Retropicker.CAMERA_PICKER || typeAction == Retropicker.GALLERY_PICKER)
             return null;
