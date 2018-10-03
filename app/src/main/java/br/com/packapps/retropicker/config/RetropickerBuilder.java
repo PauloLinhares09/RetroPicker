@@ -15,6 +15,7 @@ class RetropickerBuilder {
     private String imageName;
     private CallbackPicker callbackPicker;
     private Throwable throwable;
+    private boolean checkPermission;
 
     public RetropickerBuilder(Activity activity) {
         this.activity = activity;
@@ -66,5 +67,13 @@ class RetropickerBuilder {
 
     public void setThrowable(Throwable throwable) {
         this.throwable = throwable;
+    }
+
+    public void setCheckPermission(boolean checkPermission) {
+        this.checkPermission = checkPermission;
+    }
+
+    public boolean isCheckPermission() {
+        return checkPermission;
     }
 }

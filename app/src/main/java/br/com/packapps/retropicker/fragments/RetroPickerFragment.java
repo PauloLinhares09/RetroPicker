@@ -1,8 +1,10 @@
 package br.com.packapps.retropicker.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +13,9 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,8 +31,6 @@ import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.config.Retropicker;
 import br.com.packapps.retropicker.throwables.TypeActionRetroPickerException;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * @Author Paulo linhares 20/02/2018
  */
@@ -36,8 +39,6 @@ public class RetroPickerFragment extends Fragment {
     private static final int REQUEST_TAKE_PHOTO = 100;
     private static final int REQUEST_OPEN_GALLERY = 101;
 
-    private static final String ARG_PARAM2 = "param2";
-
 
     private int actionType;
     private String mParam2;
@@ -45,17 +46,18 @@ public class RetroPickerFragment extends Fragment {
     private String mCurrentPhotoPath;
     private CallbackPicker callbackPicker;
     private Activity activity;
+    private boolean checkpermission;
 
     public RetroPickerFragment() {
         // Required empty public constructor
     }
 
 
-    public static RetroPickerFragment newInstance(int type_action, String param2) {
+    public static RetroPickerFragment newInstance(int type_action, boolean checkpermission) {
         RetroPickerFragment fragment = new RetroPickerFragment();
         Bundle args = new Bundle();
         args.putInt(Const.Params.TYPE_ACTION, type_action);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(Const.Params.CHECK_PERMISSION, checkpermission);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,13 +65,15 @@ public class RetroPickerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TAG", "onCreate");
         if (getArguments() != null) {
             actionType = getArguments().getInt(Const.Params.TYPE_ACTION);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            checkpermission = getArguments().getBoolean(Const.Params.CHECK_PERMISSION);
         }
 
         //### axecute action
-        executeAction();
+        executeAction(checkpermission);
+
     }
 
 
@@ -80,15 +84,87 @@ public class RetroPickerFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    private void executeAction() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "onResume");
+
+    }
+
+    private void executeAction(boolean checkPermission) {
         switch (actionType){
             case Retropicker.CAMERA_PICKER:
-                callCameraIntent();
+                if (!checkPermission)
+                    callCameraIntent();
+                else
+                    mCheckPermission(Retropicker.CAMERA_PICKER);
+
                 break;
             case Retropicker.GALLERY_PICKER:
-                openGallery();
+                if (!checkPermission)
+                    openGallery();
+                else
+                    mCheckPermission(Retropicker.GALLERY_PICKER);
+
                 break;
         }
+    }
+
+    private void mCheckPermission(int actionType) {
+        switch (actionType) {
+            case Retropicker.CAMERA_PICKER:
+
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            Manifest.permission.CAMERA)) {
+
+                        // TODO: provider this option layout info to the user
+                        requestActionPermissionToUser(Manifest.permission.CAMERA, Const.MY_PERMISSIONS_REQUEST_CAMERA);
+
+                    } else {
+
+                        requestActionPermissionToUser(Manifest.permission.CAMERA, Const.MY_PERMISSIONS_REQUEST_CAMERA);
+
+                    }
+                } else {
+                    executeAction(false);
+                }
+
+                break;
+
+            case Retropicker.GALLERY_PICKER:
+
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                        // TODO: provider this option layout info to the user
+                        requestActionPermissionToUser(Manifest.permission.READ_EXTERNAL_STORAGE, Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+
+                    } else {
+
+                        requestActionPermissionToUser(Manifest.permission.READ_EXTERNAL_STORAGE, Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+
+                    }
+                } else {
+                    executeAction(false);
+                }
+
+                break;
+        }
+
+    }
+
+    private void requestActionPermissionToUser(String permissionType, int requestCodeType) {
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{permissionType},
+                requestCodeType);
     }
 
     private void openGallery() {
@@ -103,22 +179,23 @@ public class RetroPickerFragment extends Fragment {
     private void callCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                Toast.makeText(activity, "Erro ao abrir a câmera. Por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                //TODO: callback as listener
+                Toast.makeText(getActivity(), "Erro ao abrir a câmera. Por favor tente novamente.", Toast.LENGTH_SHORT).show();
                 mCurrentPhotoPath = null;
                 ex.printStackTrace();
 
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(activity,
-                        activity.getApplicationContext().getPackageName() + ".fileprovider",
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        getActivity().getPackageName() + ".fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
@@ -131,7 +208,7 @@ public class RetroPickerFragment extends Fragment {
         // Create an image file_paths name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -181,7 +258,7 @@ public class RetroPickerFragment extends Fragment {
 
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
-                activity.getContentResolver().openFileDescriptor(uri, "r");
+                getActivity().getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
         Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
         parcelFileDescriptor.close();
@@ -194,12 +271,12 @@ public class RetroPickerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //###Camera
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == activity.RESULT_OK){
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == getActivity().RESULT_OK){
             //getting photo for mCurrentImage
             //set image pic
             executeActionResult(Retropicker.CAMERA_PICKER, data);
 
-        }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == activity.RESULT_OK){
+        }else if (requestCode == REQUEST_OPEN_GALLERY && resultCode == getActivity().RESULT_OK){
 
             executeActionResult(Retropicker.GALLERY_PICKER, data);
         }
@@ -245,6 +322,36 @@ public class RetroPickerFragment extends Fragment {
 
     public void setCallBack(CallbackPicker callbackPicker) {
         this.callbackPicker = callbackPicker;
+    }
+
+
+
+    public void myOnRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Const.MY_PERMISSIONS_REQUEST_CAMERA:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    executeAction(false);
+                } else {
+                    //TODO what to do?
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                break;
+
+            case Const.MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    executeAction(false);
+                } else {
+                    //TODO what to do?
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                break;
+        }
     }
 
 }

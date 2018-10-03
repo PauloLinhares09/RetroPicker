@@ -2,7 +2,8 @@ package br.com.packapps.retropicker.config;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
-
+ 
+import br.com.packapps.retropicker.Util.Const;
 import br.com.packapps.retropicker.callback.CallbackPicker;
 import br.com.packapps.retropicker.controller.ControllerThrowable;
 import br.com.packapps.retropicker.fragments.RetroPickerFragment;
@@ -40,14 +41,20 @@ public class Retropicker  implements RetroPickerContract {
     public void open() {
 
         if (builder.getThrowable() == null){
-            //TODO without support fragment. Pending
-            retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), null);
-            FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
-            ft.add(retroPickerFragment, "RETROPICKER_FRAGMENT");
-            ft.commit();
+            if (retroPickerFragment == null) {
+                //TODO without support fragment. Pending
+                retroPickerFragment = RetroPickerFragment.newInstance(builder.getTypeAction(), builder.isCheckPermission());
+                FragmentTransaction ft = builder.getActivity().getFragmentManager().beginTransaction();
+                ft.add(retroPickerFragment, Const.RETROPICKER_FRAGMENT_TAG);
+                ft.commit();
+            }
         }
 
         enquee();
+    }
+
+    public void onRequesPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
+        retroPickerFragment.myOnRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
@@ -82,6 +89,11 @@ public class Retropicker  implements RetroPickerContract {
 
         public Retropicker create() {
             return new Retropicker(rb);
+        }
+
+        public Builder checkPermission(boolean checkPermission) {
+            rb.setCheckPermission(checkPermission);
+            return this;
         }
     }
 }
